@@ -32,3 +32,13 @@ This project simulates real-time instant payments pipeline using **Spring Boot**
 4. The result is logged via `AuditLogger`.
 5. The transaction is finally dispatched to an ActiveMQ topic for asynchronous handling.
 
+## 🔄 Communication Flow (Label in Arrows)
+PPS → BS: “JSON via JMS / REST”
+
+BS → FCS: “XML via JMS”
+
+FCS → BS: “XML via JMS”
+
+BS → PPS: “Fraud Result (JSON)”
+
+
