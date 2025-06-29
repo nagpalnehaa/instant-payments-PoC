@@ -1,0 +1,72 @@
+services:
+  pps:
+    build:
+      context: ./pps
+    container_name: pps-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - broker
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - fraud-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  broker:
+    build:
+      context: ./broker
+    container_name: broker-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - activemq
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - fraud-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  fcs:
+    build:
+      context: ./fcs
+    container_name: fcs-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - activemq
+    environment:
+      - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
+    networks:
+      - fraud-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  activemq:
+    image: rmohr/activemq:5.15.9
+    container_name: activemq
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    networks:
+      - fraud-net
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 0.0.0.0 61616"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  fraud-net:
+    driver: bridge

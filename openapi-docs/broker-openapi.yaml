@@ -1,0 +1,23 @@
+//REST Interface (Used in Solution 2)
+
+openapi: 3.0.1
+info:
+  title: Broker API
+  version: 1.0.0
+paths:
+  /api/broker/fraud-check:
+    post:
+      summary: Receives payment from PPS, transforms to XML, and routes to FCS
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Fraud check initiated
+components:
+  schemas:
+    PaymentRequest:
+      $ref: '../pps/openapi.yaml#/components/schemas/PaymentRequest'

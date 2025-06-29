@@ -1,0 +1,56 @@
+//YAML for PPS REST Endpoint (Solution 2)
+
+openapi: 3.0.1
+info:
+  title: Payment Processing API
+  version: 1.0.0
+paths:
+  /api/payments:
+    post:
+      summary: Submit a payment for fraud screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Payment received
+components:
+  schemas:
+    PaymentRequest:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        payerName:
+          type: string
+        payerBank:
+          type: string
+        payerCountryCode:
+          type: string
+        payerAccount:
+          type: string
+        payeeName:
+          type: string
+        payeeBank:
+          type: string
+        payeeCountryCode:
+          type: string
+        payeeAccount:
+          type: string
+        paymentInstruction:
+          type: string
+        executionDate:
+          type: string
+          format: date
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        creationTimestamp:
+          type: string
+          format: date-time

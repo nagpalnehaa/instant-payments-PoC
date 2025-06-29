@@ -1,0 +1,40 @@
+//REST (Optional)/JMS-Based Receipt Confirmation
+
+openapi: 3.0.1
+info:
+  title: Fraud Check System API
+  version: 1.0.0
+paths:
+  /api/fraudcheck:
+    post:
+      summary: Accepts XML payment request and returns fraud result
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Fraud check result
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/FraudCheckResult'
+components:
+  schemas:
+    PaymentRequest:
+      type: object
+      properties:
+        TransactionId:
+          type: string
+        PayerName:
+          type: string
+        ...
+    FraudCheckResult:
+      type: object
+      properties:
+        Status:
+          type: string
+        Message:
+          type: string
