@@ -11,11 +11,6 @@ services:
       - SPRING_PROFILES_ACTIVE=default
     networks:
       - fraud-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 20s
-      retries: 5
 
   broker:
     build:
@@ -29,11 +24,6 @@ services:
       - SPRING_PROFILES_ACTIVE=default
     networks:
       - fraud-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/healthz"]
-      interval: 30s
-      timeout: 20s
-      retries: 5
 
   fcs:
     build:
@@ -47,12 +37,7 @@ services:
       - SPRING_ACTIVEMQ_BROKER_URL=tcp://activemq:61616
     networks:
       - fraud-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
-      interval: 30s
-      timeout: 20s
-      retries: 5
-
+    
   activemq:
     image: rmohr/activemq:5.15.9
     container_name: activemq
@@ -61,12 +46,7 @@ services:
       - "8161:8161"
     networks:
       - fraud-net
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z 0.0.0.0 61616"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
+    
 networks:
   fraud-net:
     driver: bridge
